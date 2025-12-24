@@ -1,7 +1,7 @@
 package gfx
 
 // doesn't do anything gfx-related
-class HeadlessBackend : GraphicsBackend {
+internal class HeadlessBackend : GraphicsBackend {
     override fun startFrame() { }
 
     override fun draw(cmd: DrawCommand) { }
