@@ -4,7 +4,8 @@ plugins {
 }
 
 application {
-    mainClass.set("com.shoebob.sandbox.MainKt")
+    mainClass.set("com.shoebob.MainKt")
+    applicationDefaultJvmArgs = mutableListOf("-XstartOnFirstThread")
 }
 
 dependencies {

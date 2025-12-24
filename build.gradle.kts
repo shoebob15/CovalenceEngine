@@ -13,3 +13,7 @@ allprojects {
         mavenCentral()
     }
 }
+
+subprojects {
+    apply(plugin = "java")
+}
