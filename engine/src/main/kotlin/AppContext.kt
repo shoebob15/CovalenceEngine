@@ -1,10 +1,10 @@
+import resources.ResourceManager
 import event.EventBus
 
 typealias InputManager = Unit
-typealias ResourceManager = Unit
 typealias Renderer = Unit
 
-class AppContext(
+data class AppContext(
     val renderer: Renderer,
     val input: InputManager,
     val resources: ResourceManager,

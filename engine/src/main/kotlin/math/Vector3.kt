@@ -2,7 +2,11 @@ package math
 
 import kotlin.math.sqrt
 
-class Vector3(var x: Float, var y: Float, var z: Float) {
+class Vector3(
+    var x: Float,
+    var y: Float,
+    var z: Float
+) {
     companion object {
         fun distance(a: Vector3, b: Vector3) =
             sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z))

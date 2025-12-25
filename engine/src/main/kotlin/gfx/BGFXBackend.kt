@@ -11,7 +11,10 @@ import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import org.slf4j.LoggerFactory
 
-internal class BGFXBackend(config: ApplicationConfig, eventBus: EventBus) : GraphicsBackend, BGFXFatalCallbackI {
+internal class BGFXBackend(
+    config: ApplicationConfig,
+    eventBus: EventBus
+) : GraphicsBackend, BGFXFatalCallbackI {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     private var window = Window(config, eventBus)
@@ -34,8 +37,8 @@ internal class BGFXBackend(config: ApplicationConfig, eventBus: EventBus) : Grap
                 nwh(window.getNativeWindowHandle())
             }
 
-            if (bgfx_init(init)) {
-                logger.error("failed to initialize bgfx backend")
+            if (!bgfx_init(init)) {
+                error("failed to initialize bgfx backend")
             }
         }
 

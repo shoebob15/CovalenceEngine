@@ -1,5 +1,6 @@
 package com.shoebob
 
+import AppContext
 import Application
 import Layer
 import config.appConfig
@@ -22,16 +23,15 @@ fun main() {
 }
 
 class TestLayer : Layer {
-    override fun onEvent(event: Event): Boolean {
-        println(event)
+    override fun onEvent(event: Event, context: AppContext): Boolean {
         return false
     }
 
-    override fun onUpdate(deltaTime: Float) {
-        println("delta: $deltaTime")
+    override fun onUpdate(deltaTime: Float, context: AppContext) {
+
     }
 
-    override fun onRender() {
+    override fun onRender(context: AppContext) {
     }
 
     override fun destroy() {
