@@ -9,7 +9,10 @@ import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.system.MemoryUtil.NULL
 import org.slf4j.LoggerFactory
 
-internal class Window(config: ApplicationConfig, private val eventBus: EventBus) : Destructible {
+internal class Window(
+    private val config: ApplicationConfig,
+    private val eventBus: EventBus
+) : Destructible {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     private var handle: Long = 0L
@@ -19,8 +22,7 @@ internal class Window(config: ApplicationConfig, private val eventBus: EventBus)
 
         logger.debug("initializing glfw")
         if (!glfwInit()) {
-            logger.error("failed to initialize glfw")
-            throw GLFWException()
+            error("failed to initialize glfw")
         }
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
@@ -36,8 +38,7 @@ internal class Window(config: ApplicationConfig, private val eventBus: EventBus)
         )
 
         if (handle == NULL) {
-            logger.error("failed to create glfw window")
-            throw WindowCreationException()
+            error("failed to create glfw window")
         }
 
         glfwSetKeyCallback(handle) { _, key, scancode, action, mods ->
@@ -72,6 +73,3 @@ internal class Window(config: ApplicationConfig, private val eventBus: EventBus)
         glfwSetErrorCallback(null)?.free()
     }
 }
-
-class GLFWException : Exception("Failed to initialize GLFW")
-class WindowCreationException : Exception("Failed to create application window")

@@ -1,19 +1,25 @@
+import resources.ResourceManager
 import config.ApplicationConfig
 import event.Event
 import event.EventBus
 import gfx.BGFXBackend
 import org.lwjgl.util.remotery.Remotery.*
 import org.slf4j.LoggerFactory
+import resources.ResourceType
+import resources.loaders.TextResourceLoader
 
-class Application(val config: ApplicationConfig) {
+class Application(
+    config: ApplicationConfig
+) {
     private val eventBus = EventBus()
+    private val resourceManager = ResourceManager(config.maxCacheSize)
     private val layerStack = LayerStack()
     private val graphicsBackend = BGFXBackend(config, eventBus)
 
     private val context = AppContext(
         Renderer,
         InputManager,
-        ResourceManager,
+        resourceManager,
         eventBus,
         0f
     )
@@ -23,6 +29,11 @@ class Application(val config: ApplicationConfig) {
 
     private var running: Boolean = false
     private var lastFrameTime = System.nanoTime()
+
+    init {
+        resourceManager.registerLoader(TextResourceLoader())
+        logger.info("test: ${resourceManager.load<List<String>>("/test.txt", ResourceType.TEXT)}")
+    }
 
 
     fun run() {
@@ -44,8 +55,8 @@ class Application(val config: ApplicationConfig) {
 
             profiler.beginScope("update layers")
             for (layer in layerStack.getLayers()) {
-                layer.onUpdate(context.deltaTime)
-                layer.onRender()
+                layer.onUpdate(context.deltaTime, context)
+                layer.onRender(context)
             }
             profiler.endScope()
 
@@ -72,7 +83,7 @@ class Application(val config: ApplicationConfig) {
         rmt_BeginCPUSample("dispatch event ${event::class.qualifiedName}", 0, null)
         // dispatch to top layer first
         for (layer in layerStack.getLayers().asReversed()) {
-            if (layer.onEvent(event)) break
+            if (layer.onEvent(event, context)) break
         }
         rmt_EndCPUSample()
     }
