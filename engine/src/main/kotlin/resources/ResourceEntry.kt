@@ -1,6 +1,6 @@
 package resources
 
-data class ResourceEntry<T>(
+internal data class ResourceEntry<T>(
     val resource: Resource<T>,
     val size: Long, // in bytes
     val refs: Int = 0,

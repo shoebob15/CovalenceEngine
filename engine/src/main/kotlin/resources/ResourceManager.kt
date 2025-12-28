@@ -3,10 +3,10 @@ package resources
 import Destructible
 import org.slf4j.LoggerFactory
 
-class ResourceManager(
+class ResourceManager internal constructor(
     val maxCacheSizeMb: Int
 ) : Destructible {
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val maxCacheSizeBytes = maxCacheSizeMb * 1024L * 1024L
     private var currentCacheSize: Long = 0
@@ -50,17 +50,21 @@ class ResourceManager(
         )
 
         currentCacheSize += size
-        logger.debug("loaded cached resource {} of type {}", path, type)
+        logger.debug("loaded uncached resource {} of type {}", path, type)
 
         return resource
     }
 
-    fun free(resource: Resource<*>) {
+    internal fun free(resource: Resource<*>) {
         val entry = cache[resource.path] ?: return
 
         if (entry.refs > 0) {
             cache[resource.path] = entry.copy(refs = entry.refs - 1)
         }
+    }
+
+    internal fun free(resourcePath: String) {
+        free(cache[resourcePath]?.resource ?: return)
     }
 
     // checks if cache size + incomingSize is greater than maxCacheSize

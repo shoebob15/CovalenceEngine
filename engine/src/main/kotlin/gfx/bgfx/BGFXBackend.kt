@@ -1,35 +1,50 @@
-package gfx
+package gfx.bgfx
 
 import Window
 import config.ApplicationConfig
 import event.EventBus
+import gfx.GraphicsBackend
+import gfx.commands.DrawCommand
+import gfx.Texture
+import gfx.commands.QuadCommand
+import gfx.commands.TexturedQuadCommand
 import org.lwjgl.bgfx.BGFX.*
-import org.lwjgl.bgfx.BGFXFatalCallbackI
-import org.lwjgl.bgfx.BGFXInit
+import org.lwjgl.bgfx.*
 import org.lwjgl.bgfx.BGFXPlatform.bgfx_render_frame
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import org.slf4j.LoggerFactory
+import resources.ImageData
 
 internal class BGFXBackend(
     config: ApplicationConfig,
     eventBus: EventBus
 ) : GraphicsBackend, BGFXFatalCallbackI {
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    private var window = Window(config, eventBus)
+    private val resizeCallback: (Int, Int) -> Unit = { width: Int, height: Int ->
+        currentWindowSize = Pair(width, height)
+        bgfx_reset(
+            width,
+            height,
+            BGFX_RESET_VSYNC,
+            BGFX_TEXTURE_FORMAT_RGBA16
+        )
+    }
+    private val window = Window(config, eventBus, resizeCallback)
+    private var currentWindowSize = Pair(config.windowConfig.width, config.windowConfig.height)
 
     // TODO: make this crossplatform
     init {
-        bgfx_render_frame(-1) // osx fix
+        bgfx_render_frame(-1) // osx fix (threading etc.)
         MemoryStack.stackPush().use { stack ->
             logger.debug("initializing bgfx")
             val init = BGFXInit.malloc(stack)
             bgfx_init_ctor(init)
 
             init.resolution().apply {
-                width(800)
-                height(600)
+                width(config.windowConfig.width)
+                height(config.windowConfig.height)
                 reset(BGFX_RESET_VSYNC)
             }
 
@@ -46,7 +61,7 @@ internal class BGFXBackend(
         bgfx_set_debug(BGFX_DEBUG_STATS)
         bgfx_set_view_clear(
             0,
-            BGFX_CLEAR_COLOR or BGFX_CLEAR_DEPTH, // why is kotlin bitwise like this
+            BGFX_CLEAR_COLOR or BGFX_CLEAR_DEPTH,
             0x28282801,
             1.0f,
             0
@@ -56,12 +71,41 @@ internal class BGFXBackend(
     override fun startFrame() {
         window.update()
 
-        bgfx_set_view_rect(0, 0, 0, 800, 600)
+        bgfx_set_view_rect(0, 0, 0, currentWindowSize.first, currentWindowSize.second)
         bgfx_touch(0) // submit empty to force clear
     }
 
     override fun draw(cmd: DrawCommand) {
-        TODO("Not yet implemented")
+        when (cmd) {
+            is QuadCommand -> {
+
+            }
+
+            is TexturedQuadCommand -> {
+
+            }
+        }
+    }
+
+    override fun createTexture(data: ImageData): Texture {
+        val mem = bgfx_copy(data.pixels)
+
+        val handle = bgfx_create_texture_2d(
+            data.width,
+            data.height,
+            false,
+            1,
+            BGFX_TEXTURE_FORMAT_RGBA8,
+            BGFX_TEXTURE_NONE,
+            mem
+        )
+
+        return BGFXTexture(
+            handle,
+            data.width,
+            data.height
+        )
+
     }
 
     override fun endFrame() {

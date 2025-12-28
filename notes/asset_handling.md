@@ -11,7 +11,7 @@
 
 max size should be ~1gb
 
-assets - map string:asset (string is path)
+assets - map string:asset entry (string is path)
 
 asset loading ref-counting would be based on manual cleanup ( : Destructible)
 

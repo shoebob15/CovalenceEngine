@@ -4,10 +4,18 @@ val lwjglNatives = "natives-macos-arm64"
 plugins {
     kotlin("jvm")
     `java-library`
+    idea
 }
 
 repositories {
     mavenCentral()
+}
+// makes dev much easier
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+    }
 }
 
 dependencies {

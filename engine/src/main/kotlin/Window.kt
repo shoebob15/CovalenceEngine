@@ -9,11 +9,14 @@ import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.system.MemoryUtil.NULL
 import org.slf4j.LoggerFactory
 
+typealias ResizeCallback = (Int, Int) -> Unit
+
 internal class Window(
     private val config: ApplicationConfig,
-    private val eventBus: EventBus
+    private val eventBus: EventBus,
+    private val resizeCallback: ResizeCallback
 ) : Destructible {
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     private var handle: Long = 0L
 
@@ -47,6 +50,7 @@ internal class Window(
 
         glfwSetWindowSizeCallback(handle) { _, w, h ->
             eventBus.post(WindowResizeEvent(w, h))
+            resizeCallback(w, h)
         }
 
         glfwShowWindow(handle)
@@ -60,10 +64,6 @@ internal class Window(
 
     // TODO: make crossplatform
     fun getNativeWindowHandle(): Long = glfwGetCocoaWindow(handle)
-
-    fun getWindowSize(): Int {
-        TODO("not implemented")
-    }
 
     override fun destroy() {
         logger.info("destroying window")

@@ -6,6 +6,6 @@ data class Resource<T>(
     val type: ResourceType
 ) : AutoCloseable {
     override fun close() {
-        // loaders can override function if needed
+        // loaders can override function if needed (maybe, idk) TODO
     }
 }

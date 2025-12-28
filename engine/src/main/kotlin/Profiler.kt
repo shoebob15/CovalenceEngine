@@ -6,7 +6,7 @@ import kotlin.use
 // TODO: don't enable/include debug tools in release builds
 internal class Profiler: Destructible {
     private var handle: Long = 0 // remotery handle
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
         logger.debug("initializing remotery profiler")

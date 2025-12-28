@@ -2,10 +2,11 @@ import resources.ResourceManager
 import config.ApplicationConfig
 import event.Event
 import event.EventBus
-import gfx.BGFXBackend
+import gfx.bgfx.BGFXBackend
 import org.lwjgl.util.remotery.Remotery.*
 import org.slf4j.LoggerFactory
 import resources.ResourceType
+import resources.loaders.ImageResourceLoader
 import resources.loaders.TextResourceLoader
 
 class Application(
@@ -25,16 +26,15 @@ class Application(
     )
 
     private val profiler = Profiler()
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     private var running: Boolean = false
     private var lastFrameTime = System.nanoTime()
 
     init {
-        resourceManager.registerLoader(TextResourceLoader())
-        logger.info("test: ${resourceManager.load<List<String>>("/test.txt", ResourceType.TEXT)}")
+        context.resources.registerLoader(TextResourceLoader())
+        context.resources.registerLoader(ImageResourceLoader())
     }
-
 
     fun run() {
         running = true
