@@ -8,6 +8,7 @@ import resources.ResourceLoader
 import resources.ResourceType
 import java.nio.ByteBuffer
 
+// TODO: create a workflow or develop an api to compile images
 class ImageResourceLoader : ResourceLoader<ImageData> {
     override val type: ResourceType = ResourceType.IMAGE
 

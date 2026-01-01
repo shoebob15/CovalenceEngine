@@ -2,7 +2,7 @@ package gfx.headless
 
 import gfx.GraphicsBackend
 import gfx.Texture
-import gfx.commands.DrawCommand
+import gfx.DrawCommand
 import resources.ImageData
 
 // doesn't do anything gfx-related

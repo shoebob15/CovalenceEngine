@@ -19,6 +19,7 @@ internal class Profiler: Destructible {
             }
         }
 
+
     }
 
     fun beginScope(name: String) {

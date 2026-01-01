@@ -1,6 +1,6 @@
 package gfx
 
-import gfx.commands.DrawCommand
+import gfx.DrawCommand
 
 class RenderQueue {
     private val queue = ArrayDeque<DrawCommand>(1024)

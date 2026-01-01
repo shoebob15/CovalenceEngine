@@ -1,7 +1,7 @@
 package gfx
 
 import Destructible
-import gfx.commands.DrawCommand
+import gfx.DrawCommand
 import resources.ImageData
 
 // redundant, since bgfx *should* handle all graphics backends

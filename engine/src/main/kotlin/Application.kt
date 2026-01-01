@@ -1,11 +1,13 @@
 import resources.ResourceManager
 import config.ApplicationConfig
+import event.EngineInitializationEvent
 import event.Event
 import event.EventBus
 import gfx.bgfx.BGFXBackend
 import org.lwjgl.util.remotery.Remotery.*
 import org.slf4j.LoggerFactory
 import resources.ResourceType
+import resources.loaders.BinaryResourceLoader
 import resources.loaders.ImageResourceLoader
 import resources.loaders.TextResourceLoader
 
@@ -13,9 +15,13 @@ class Application(
     config: ApplicationConfig
 ) {
     private val eventBus = EventBus()
-    private val resourceManager = ResourceManager(config.maxCacheSize)
+    private val resourceManager = ResourceManager(config.maxCacheSize).apply {
+        registerLoader(TextResourceLoader())
+        registerLoader(ImageResourceLoader())
+        registerLoader(BinaryResourceLoader())
+    }
     private val layerStack = LayerStack()
-    private val graphicsBackend = BGFXBackend(config, eventBus)
+    private val graphicsBackend = BGFXBackend(config, eventBus, resourceManager)
 
     private val context = AppContext(
         Renderer,
@@ -34,10 +40,13 @@ class Application(
     init {
         context.resources.registerLoader(TextResourceLoader())
         context.resources.registerLoader(ImageResourceLoader())
+        context.resources.registerLoader(BinaryResourceLoader())
     }
 
     fun run() {
         running = true
+
+        eventBus.post(EngineInitializationEvent())
 
         while (running) {
             profiler.beginScope("main loop")

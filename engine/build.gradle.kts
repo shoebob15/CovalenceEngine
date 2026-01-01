@@ -35,6 +35,8 @@ dependencies {
     implementation ("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
 
     implementation("ch.qos.logback:logback-classic:0.9.26")
+
+    implementation("org.joml:joml:1.10.8") // TODO: remove dependency on joml
 }
 
 kotlin {

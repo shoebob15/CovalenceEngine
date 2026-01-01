@@ -3,6 +3,7 @@ package resources
 import Destructible
 import org.slf4j.LoggerFactory
 
+// TODO: asynchronously load resources, especially since that can include compilation in the future (shaders, images)
 class ResourceManager internal constructor(
     val maxCacheSizeMb: Int
 ) : Destructible {
@@ -15,6 +16,7 @@ class ResourceManager internal constructor(
     private val cache = mutableMapOf<String, ResourceEntry<*>>()
 
     fun registerLoader(loader: ResourceLoader<*>) {
+        logger.debug("registered loader of type {}", loader.type)
         loaders[loader.type] = loader
     }
 
