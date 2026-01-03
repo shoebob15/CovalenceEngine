@@ -7,6 +7,7 @@ import org.lwjgl.glfw.*
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.system.MemoryUtil.NULL
+import org.lwjgl.system.Platform
 import org.slf4j.LoggerFactory
 
 typealias ResizeCallback = (Int, Int) -> Unit
@@ -62,8 +63,14 @@ internal class Window(
 
     fun shouldClose(): Boolean = glfwWindowShouldClose(handle)
 
-    // TODO: make crossplatform
-    fun getNativeWindowHandle(): Long = glfwGetCocoaWindow(handle)
+    fun getNativeWindowHandle(): Long {
+        val platform = Platform.get()
+
+        when (platform) {
+            Platform.FREEBSD, Platform.LINUX, Platform.WINDOWS -> error("platform is not supported!")
+            Platform.MACOSX -> return glfwGetCocoaWindow(handle)
+        }
+    }
 
     override fun destroy() {
         logger.info("destroying window")

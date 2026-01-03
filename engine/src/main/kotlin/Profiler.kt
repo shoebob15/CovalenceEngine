@@ -18,8 +18,6 @@ internal class Profiler: Destructible {
                 logger.debug("remotery running on port ${rmt_Settings()?.port()}")
             }
         }
-
-
     }
 
     fun beginScope(name: String) {

@@ -10,7 +10,7 @@ internal interface GraphicsBackend : Destructible {
     fun startFrame()
     fun endFrame()
 
-    fun draw(cmd: DrawCommand)
+    fun <T : DrawCommand> draw(cmd: T)
     fun createTexture(data: ImageData) : Texture
 
     fun shouldClose(): Boolean

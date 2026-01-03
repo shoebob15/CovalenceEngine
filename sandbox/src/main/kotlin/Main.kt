@@ -27,7 +27,6 @@ fun main() {
 
 class TestLayer : Layer {
     override fun onEvent(event: Event, context: AppContext): Boolean {
-        val e = context.resources.load<ImageData>("/profile.png", ResourceType.IMAGE)
         return false
     }
 

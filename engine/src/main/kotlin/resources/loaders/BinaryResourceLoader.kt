@@ -23,7 +23,6 @@ class BinaryResourceLoader : ResourceLoader<ByteBuffer> {
     // TODO: find a way to get the size of a bytebuffer (this isn't actually how)
     // i don't feel like doing it rn
     override fun sizeOf(data: ByteBuffer): Long {
-        println("sizeOf bytebuffer: ${data.remaining()}")
         return data.remaining().toLong()
     }
 }
