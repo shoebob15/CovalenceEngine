@@ -1,8 +1,10 @@
 package gfx
 
 import Destructible
+import gfx.bgfx.BGFXTexture
 import resources.*
 
+// TODO: use this somehow
 internal class TextureRegistry (
     private val backend: GraphicsBackend,
     private val resources: ResourceManager
@@ -12,7 +14,8 @@ internal class TextureRegistry (
     fun get(path: String): Texture {
         return textures.getOrPut(path) {
             val imageResource = resources.load<ImageData>(path, ResourceType.IMAGE)
-            backend.createTexture(imageResource.data)
+            // create texture
+            return BGFXTexture(0, 0, 0)
         }
     }
 

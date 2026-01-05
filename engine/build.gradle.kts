@@ -10,6 +10,7 @@ plugins {
 repositories {
     mavenCentral()
 }
+
 // makes dev much easier
 idea {
     module {
@@ -25,16 +26,18 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-assimp")
     implementation("org.lwjgl", "lwjgl-bgfx")
     implementation("org.lwjgl", "lwjgl-glfw")
+    implementation("org.lwjgl", "lwjgl-opengl")
     implementation("org.lwjgl", "lwjgl-remotery")
     implementation("org.lwjgl", "lwjgl-stb")
     implementation ("org.lwjgl", "lwjgl", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-assimp", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-bgfx", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
+    implementation ("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-remotery", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
 
-    implementation("ch.qos.logback:logback-classic:0.9.26")
+    implementation("ch.qos.logback:logback-classic:1.5.13")
 
     implementation("org.joml:joml:1.10.8") // TODO: remove dependency on joml
 }

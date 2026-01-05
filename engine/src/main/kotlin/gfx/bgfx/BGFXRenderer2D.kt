@@ -23,10 +23,16 @@ internal class BGFXRenderer2D(
     )
 
     fun begin(viewId: Int, width: Int, height: Int) {
-        view.identity()
-        view.ortho(0f, width.toFloat(), height.toFloat(), 0f, 0f, 100f)
+        val viewMat = Matrix4f().identity()
 
-        bgfx_set_view_transform(viewId, null, view.get(projBuf))
+        view.identity()
+        view.ortho(0f, width.toFloat(), height.toFloat(), 0f, -1f, 100f)
+
+        bgfx_set_view_transform(
+            viewId,
+            viewMat.get(viewBuf),
+            view.get(projBuf)
+        )
 
         bgfx_set_view_rect(viewId, 0, 0, width, height)
     }
@@ -60,6 +66,7 @@ internal class BGFXRenderer2D(
         putVertex(v, x + w, y, 1f, 0f, color)
         putVertex(v, x + w, y + h, 1f, 1f, color)
         putVertex(v, x, y + h, 0f, 1f, color)
+        v.flip()
 
         i.putShort(0).putShort(1).putShort(2)
         i.putShort(0).putShort(2).putShort(3)
@@ -75,7 +82,8 @@ internal class BGFXRenderer2D(
             encoder,
             BGFX_STATE_WRITE_RGB or
                     BGFX_STATE_WRITE_A or
-                    BGFX_STATE_BLEND_ALPHA,
+                    BGFX_STATE_BLEND_ALPHA or
+                    BGFX_STATE_DEPTH_TEST_ALWAYS,
             0
         )
         bgfx_encoder_submit(encoder, 0, program, 0, 0)
@@ -84,6 +92,8 @@ internal class BGFXRenderer2D(
 
     fun end() { }
 
+
+    // TODO: replace params with PosColorTexVertex
     private fun putVertex(
         buf: ByteBuffer,
         x: Float,

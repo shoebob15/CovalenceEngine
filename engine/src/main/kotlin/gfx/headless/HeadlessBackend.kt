@@ -9,8 +9,7 @@ import resources.ImageData
 internal class HeadlessBackend : GraphicsBackend {
     override fun startFrame() { }
 
-    override fun draw(cmd: DrawCommand) { }
-    override fun createTexture(data: ImageData): Texture = HeadlessTexture()
+    override fun <T : DrawCommand> draw(cmd: T) { }
 
     override fun endFrame() { }
 

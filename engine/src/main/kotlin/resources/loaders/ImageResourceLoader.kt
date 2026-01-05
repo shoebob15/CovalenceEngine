@@ -9,10 +9,13 @@ import resources.ResourceType
 import java.nio.ByteBuffer
 
 // TODO: create a workflow or develop an api to compile images
+// TODO: free image memory through a free() fun or similar
 class ImageResourceLoader : ResourceLoader<ImageData> {
     override val type: ResourceType = ResourceType.IMAGE
 
     override fun load(path: String): ImageData {
+        stbi_set_flip_vertically_on_load(true)
+
         val dataArray = javaClass
             .getResourceAsStream(path)
             ?.readAllBytes() ?: error("failed to load resource $path")

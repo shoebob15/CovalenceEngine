@@ -1,5 +1,6 @@
 package util
 
+// TODO: hex to rgb and other conversion functions
 data class Color(
     val r: Float,
     val g: Float,

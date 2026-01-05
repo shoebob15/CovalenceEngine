@@ -4,6 +4,7 @@ import event.EngineInitializationEvent
 import event.Event
 import event.EventBus
 import gfx.bgfx.BGFXBackend
+import gfx.opengl.GLBackend
 import org.lwjgl.util.remotery.Remotery.*
 import org.slf4j.LoggerFactory
 import resources.ResourceType
@@ -21,7 +22,7 @@ class Application(
         registerLoader(BinaryResourceLoader())
     }
     private val layerStack = LayerStack()
-    private val graphicsBackend = BGFXBackend(config, eventBus, resourceManager)
+    private val graphicsBackend = GLBackend(config, eventBus, resourceManager)
 
     private val context = AppContext(
         Renderer,
@@ -36,12 +37,6 @@ class Application(
 
     private var running: Boolean = false
     private var lastFrameTime = System.nanoTime()
-
-    init {
-        context.resources.registerLoader(TextResourceLoader())
-        context.resources.registerLoader(ImageResourceLoader())
-        context.resources.registerLoader(BinaryResourceLoader())
-    }
 
     fun run() {
         running = true

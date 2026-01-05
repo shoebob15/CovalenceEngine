@@ -15,7 +15,7 @@ typealias ResizeCallback = (Int, Int) -> Unit
 internal class Window(
     private val config: ApplicationConfig,
     private val eventBus: EventBus,
-    private val resizeCallback: ResizeCallback
+    private val resizeCallback: ResizeCallback?
 ) : Destructible {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -29,8 +29,11 @@ internal class Window(
             error("failed to initialize glfw")
         }
 
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
         glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+
 
         logger.info("creating window")
         handle = glfwCreateWindow(
@@ -51,14 +54,17 @@ internal class Window(
 
         glfwSetWindowSizeCallback(handle) { _, w, h ->
             eventBus.post(WindowResizeEvent(w, h))
-            resizeCallback(w, h)
+            resizeCallback?.invoke(w, h)
         }
 
+        glfwMakeContextCurrent(handle)
+        glfwSwapInterval(1)
         glfwShowWindow(handle)
     }
 
     fun update() {
         glfwPollEvents()
+        glfwSwapBuffers(handle)
     }
 
     fun shouldClose(): Boolean = glfwWindowShouldClose(handle)
