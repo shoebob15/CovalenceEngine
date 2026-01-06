@@ -6,6 +6,7 @@ import Layer
 import config.appConfig
 import config.windowConfig
 import event.Event
+import math.Vector2
 import resources.ImageData
 import resources.ResourceType
 import java.nio.ByteBuffer
@@ -35,6 +36,7 @@ class TestLayer : Layer {
     }
 
     override fun onRender(context: AppContext) {
+        context.renderer.draw("/test2.png", Vector2(5f), size = Vector2(5f))
     }
 
     override fun destroy() {

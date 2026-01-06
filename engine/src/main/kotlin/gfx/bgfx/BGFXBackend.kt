@@ -5,6 +5,7 @@ import config.ApplicationConfig
 import event.EventBus
 import gfx.DrawCommand
 import gfx.GraphicsBackend
+import gfx.Texture
 import org.lwjgl.bgfx.BGFX.*
 import org.lwjgl.bgfx.*
 import org.lwjgl.bgfx.BGFXPlatform.bgfx_render_frame
@@ -122,13 +123,17 @@ internal class BGFXBackend(
         bgfx_touch(0)
     }
 
-    override fun <T : DrawCommand> draw(cmd: T) {
-
-    }
-
     override fun endFrame() {
         renderer.end()
         bgfx_frame(false)
+    }
+
+    override fun draw(cmd: DrawCommand) {
+        TODO("Not yet implemented")
+    }
+
+    override fun createTexture(data: ImageData): Texture {
+        return BGFXTexture(0, 0, 0)
     }
 
     override fun shouldClose(): Boolean {

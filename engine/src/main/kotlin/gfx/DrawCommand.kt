@@ -1,11 +1,15 @@
 package gfx
 
-import util.Color
+import math.Vector2
 
-// TODO: replace x, y, w, h with transform or smth else
 internal sealed interface DrawCommand {
-    data class Clear(val color: Color)
-    data class Quad(val x: Float, val y: Float, val width: Float, val height: Float)
-    data class TexturedQuad(val x: Float, val y: Float, val width: Float, val height: Float, val handle: TextureHandle)
+    // TODO: draw commands should not contain path/string, do a hash/handle of some kind
+    // tldr: make resource system more tightly coupled to gfx system, rewrite it prob
+    data class TexturedQuad(
+        val path: String,
+        val position: Vector2,
+        val size: Vector2 = Vector2(1f),
+        val rotation: Float = 0f
+    ) : DrawCommand
     // possibly other primitives, tbd
 }

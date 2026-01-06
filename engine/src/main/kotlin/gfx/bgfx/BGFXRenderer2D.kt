@@ -75,7 +75,7 @@ internal class BGFXRenderer2D(
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, vb, 0, 4)
         bgfx_encoder_set_transient_index_buffer(encoder, ib, 0, 6)
         bgfx_encoder_set_texture(
-            encoder, 0, samplerUniform, texture.handle.id, BGFX_SAMPLER_NONE
+            encoder, 0, samplerUniform, texture.handle.id.toShort(), BGFX_SAMPLER_NONE
         )
 
         bgfx_encoder_set_state(

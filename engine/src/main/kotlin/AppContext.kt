@@ -1,8 +1,8 @@
 import resources.ResourceManager
 import event.EventBus
+import gfx.Renderer
 
 typealias InputManager = Unit
-typealias Renderer = Unit
 
 data class AppContext(
     val renderer: Renderer,

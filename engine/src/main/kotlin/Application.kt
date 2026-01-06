@@ -3,6 +3,7 @@ import config.ApplicationConfig
 import event.EngineInitializationEvent
 import event.Event
 import event.EventBus
+import gfx.Renderer
 import gfx.bgfx.BGFXBackend
 import gfx.opengl.GLBackend
 import org.lwjgl.util.remotery.Remotery.*
@@ -25,7 +26,7 @@ class Application(
     private val graphicsBackend = GLBackend(config, eventBus, resourceManager)
 
     private val context = AppContext(
-        Renderer,
+        Renderer(graphicsBackend),
         InputManager,
         resourceManager,
         eventBus,

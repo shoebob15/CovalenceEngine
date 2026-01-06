@@ -15,7 +15,7 @@ internal class TextureRegistry (
         return textures.getOrPut(path) {
             val imageResource = resources.load<ImageData>(path, ResourceType.IMAGE)
             // create texture
-            return BGFXTexture(0, 0, 0)
+            return backend.createTexture(imageResource.data)
         }
     }
 

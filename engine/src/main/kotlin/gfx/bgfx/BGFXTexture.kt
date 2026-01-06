@@ -10,7 +10,7 @@ internal class BGFXTexture(
     override val height: Int
 ) : Texture {
 
-    override val handle = TextureHandle(bgfxHandle)
+    override val handle = TextureHandle(bgfxHandle.toInt())
 
     override fun destroy() {
         bgfx_destroy_texture(bgfxHandle)

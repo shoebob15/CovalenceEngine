@@ -6,7 +6,7 @@ import resources.ResourceType
 import org.lwjgl.opengl.GL20.*
 import org.slf4j.LoggerFactory
 
-class GLProgram(
+internal class GLProgram(
     val vertexPath: String,
     val fragmentPath: String,
     val resources: ResourceManager
