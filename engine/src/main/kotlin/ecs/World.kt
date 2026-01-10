@@ -1,32 +1,26 @@
 package ecs
 
-import kotlin.reflect.KClass
+import gfx.Renderer
 
-class World {
+class World(
+    val entityManager: EntityManager,
+    val renderer: Renderer
+) {
+    private val systems = mutableMapOf<FramePhase, MutableList<System>>()
 
-    @PublishedApi internal val entityManager = EntityManager()
-    internal val systemManager = SystemManager(entityManager)
+    fun addSystem(phase: FramePhase, system: System) {
+        systems.getOrPut(phase) { mutableListOf() }.add(system)
+    }
 
+    fun update(deltaTime: Float) {
+        systems[FramePhase.UPDATE]?.forEach {
+            it.update(this, deltaTime)
+        }
+    }
 
-    fun createEntity(): Entity = entityManager.createEntity()
-
-    fun deleteEntity(entity: Entity) = entityManager.deleteEntity(entity)
-
-    fun addComponent(entity: Entity, component: Component) =
-        entityManager.addComponent(entity, component)
-
-    fun removeComponent(entity: Entity, type: KClass<out Component>) =
-        entityManager.removeComponent(entity, type)
-
-    inline fun <reified T : Component> getComponent(entity: Entity): T? =
-        entityManager.getComponent(entity)
-
-    fun getComponents(entity: Entity): Array<Component?> =
-        entityManager.getComponents(entity)
-
-    fun createSystem(system: System) = systemManager.addSystem(system)
-
-    fun removeSystem(system: System) = systemManager.removeSystem(system)
-
-
+    fun render(deltaTime: Float) {
+        systems[FramePhase.RENDER]?.forEach {
+            it.update(this, deltaTime)
+        }
+    }
 }

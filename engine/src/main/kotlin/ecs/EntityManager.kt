@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 // TODO: make entity manager more robust with bit-based tagging system
 // schema-based? idk what it's called, but i read an article abt it
-class EntityManager internal constructor() {
+class EntityManager() {
 
     private val maxEntities = 1_000
 

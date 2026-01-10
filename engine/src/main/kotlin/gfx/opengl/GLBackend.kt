@@ -105,7 +105,6 @@ internal class GLBackend(
     }
 
     override fun startFrame() {
-        camera.position.x -= 1f
         // clear
         glViewport(0, 0, currentWindowSize.first, currentWindowSize.second)
         // TODO: create clear color command or smth in api

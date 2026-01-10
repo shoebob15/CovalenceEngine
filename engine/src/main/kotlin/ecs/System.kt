@@ -1,7 +1,5 @@
 package ecs
 
 interface System {
-    fun beforeInvoke()
-    operator fun invoke(entity: Entity)
-    fun afterInvoke()
+    fun update(world: World, deltaTime: Float)
 }

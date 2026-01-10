@@ -23,7 +23,7 @@ class Application(
         registerLoader(ImageResourceLoader())
         registerLoader(BinaryResourceLoader())
     }
-    private val layerStack = LayerStack()
+
     private val graphicsBackend = GLBackend(config, eventBus, resourceManager)
 
     private val context = AppContext(
@@ -33,6 +33,8 @@ class Application(
         eventBus,
         0f
     )
+
+    private val layerStack = LayerStack(context)
 
     private val profiler = Profiler()
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -61,8 +63,8 @@ class Application(
 
             profiler.beginScope("update layers")
             for (layer in layerStack.getLayers()) {
-                layer.onUpdate(context.deltaTime, context)
-                layer.onRender(context)
+                layer.onUpdate(context.deltaTime)
+                layer.onRender()
             }
             profiler.endScope()
 
@@ -89,7 +91,7 @@ class Application(
         rmt_BeginCPUSample("dispatch event ${event::class.qualifiedName}", 0, null)
         // dispatch to top layer first
         for (layer in layerStack.getLayers().asReversed()) {
-            if (layer.onEvent(event, context)) break
+            if (layer.onEvent(event)) break
         }
         rmt_EndCPUSample()
     }
