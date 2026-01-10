@@ -1,3 +1,4 @@
+import ecs.World
 import resources.ResourceManager
 import event.EventBus
 import gfx.Renderer

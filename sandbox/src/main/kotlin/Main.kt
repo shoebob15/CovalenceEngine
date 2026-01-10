@@ -5,6 +5,7 @@ import Application
 import Layer
 import config.appConfig
 import config.windowConfig
+import ecs.World
 import event.Event
 import math.Vector2
 import resources.ImageData
@@ -27,6 +28,8 @@ fun main() {
 }
 
 class TestLayer : Layer {
+    val world = World()
+
     override fun onEvent(event: Event, context: AppContext): Boolean {
         return false
     }

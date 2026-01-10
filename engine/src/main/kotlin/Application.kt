@@ -1,5 +1,6 @@
 import resources.ResourceManager
 import config.ApplicationConfig
+import ecs.World
 import event.EngineInitializationEvent
 import event.Event
 import event.EventBus
