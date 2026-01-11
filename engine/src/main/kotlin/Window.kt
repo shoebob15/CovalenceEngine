@@ -58,7 +58,10 @@ internal class Window(
         }
 
         glfwMakeContextCurrent(handle)
-        glfwSwapInterval(1)
+        // i love apple <3
+        if (Platform.get() != Platform.MACOSX) {
+            glfwSwapInterval(1)
+        }
         glfwShowWindow(handle)
     }
 

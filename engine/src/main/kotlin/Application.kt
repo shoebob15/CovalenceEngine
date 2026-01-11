@@ -40,6 +40,7 @@ class Application(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private var running: Boolean = false
+    private val targetFrameTime = 1_000_000_000L / 120
     private var lastFrameTime = System.nanoTime()
 
     fun run() {
@@ -48,9 +49,11 @@ class Application(
         eventBus.post(EngineInitializationEvent())
 
         while (running) {
+            val frameStart = System.nanoTime()
+
             profiler.beginScope("main loop")
-            val currentTime = System.nanoTime()
-            context.deltaTime = (currentTime - lastFrameTime) / 1_000_000f // change to float in ms
+            context.deltaTime = (frameStart - lastFrameTime) / 1_000_000f // change to float in ms
+            lastFrameTime = frameStart
 
             profiler.beginScope("begin frame")
             graphicsBackend.startFrame()
@@ -75,6 +78,7 @@ class Application(
             profiler.endScope()
 
             lastFrameTime = System.nanoTime()
+            limitFrameRate(frameStart)
             profiler.endScope()
         }
     }
@@ -98,4 +102,18 @@ class Application(
         }
         rmt_EndCPUSample()
     }
+
+    private fun limitFrameRate(frameStart: Long) {
+        val frameTime = System.nanoTime() - frameStart
+        val remaining = targetFrameTime - frameTime
+        logger.debug("frame time $frameTime, sleeping for $remaining")
+
+        if (remaining > 0) {
+            Thread.sleep(
+                remaining / 1_000_000,
+                (remaining % 1_000_000).toInt()
+            )
+        }
+    }
+
 }

@@ -6,10 +6,10 @@ import ecs.World
 import event.Input
 
 class PlayerControlSystem : System {
-    private val playerSpeed = 200f
+    private val playerSpeed = 2f
 
     override fun update(world: World, deltaTime: Float) {
-        println("fps: ${1f / deltaTime}")
+        println("fps: ${1000f / deltaTime}")
 
         world.entityManager.iterateEntities { entity ->
             // TODO: from an api standpoint, this is unacceptable. related to todo in EntityManager
@@ -27,11 +27,11 @@ class PlayerControlSystem : System {
                 }
 
                 if (Input.isKeyPressed(65)) { // A
-                    transform.position.x += playerSpeed * deltaTime
+                    transform.position.x -= playerSpeed * deltaTime
                 }
 
                 if (Input.isKeyPressed(68)) { // D
-                    transform.position.x -= playerSpeed * deltaTime
+                    transform.position.x += playerSpeed * deltaTime
                 }
             }
         }

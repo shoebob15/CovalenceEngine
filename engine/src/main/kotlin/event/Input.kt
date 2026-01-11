@@ -8,7 +8,6 @@ object Input {
     private val keys = Array(348) { false }
 
     internal fun consumeEvent(event: Event) {
-        println(event)
         // TODO: replace GLFW constants with native constants
         if (event is KeyEvent) {
             if (event.action == GLFW_PRESS) keys[event.key] = true
