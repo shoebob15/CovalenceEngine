@@ -30,7 +30,6 @@ class ResourceManager internal constructor(
                 refs = entry.refs + 1,
                 lastUsed = System.currentTimeMillis()
             )
-            logger.debug("loaded cached resource {} of type {}", path, type)
             return entry.resource
         }
 
@@ -52,7 +51,6 @@ class ResourceManager internal constructor(
         )
 
         currentCacheSize += size
-        logger.debug("loaded uncached resource {} of type {}", path, type)
 
         return resource
     }

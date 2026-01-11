@@ -4,6 +4,7 @@ import ecs.World
 import event.EngineInitializationEvent
 import event.Event
 import event.EventBus
+import event.Input
 import gfx.Renderer
 import gfx.bgfx.BGFXBackend
 import gfx.opengl.GLBackend
@@ -28,7 +29,6 @@ class Application(
 
     private val context = AppContext(
         Renderer(graphicsBackend),
-        InputManager,
         resourceManager,
         eventBus,
         0f
@@ -58,10 +58,13 @@ class Application(
             if (graphicsBackend.shouldClose()) stop()
 
             profiler.beginScope("event dispatcher")
-            eventBus.flush { event -> dispatchToLayers(event) }
+            eventBus.flush { event ->
+                dispatchToLayers(event)
+                Input.consumeEvent(event)
+            }
             profiler.endScope()
 
-            profiler.beginScope("update layers")
+            profiler.beginScope("update layers/ecs")
             for (layer in layerStack.getLayers()) {
                 layer.onUpdate(context.deltaTime)
                 layer.onRender()

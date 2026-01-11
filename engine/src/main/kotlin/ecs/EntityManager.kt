@@ -5,7 +5,9 @@ import kotlin.reflect.KClass
 
 // TODO: make entity manager more robust with bit-based tagging system
 // schema-based? idk what it's called, but i read an article abt it
-class EntityManager() {
+// i ran a crude entity benchmark, and for every 1000 entities and querying one component from each, takes ~1 ms
+// not crazy slow, but definitely can be improved in the future. not using reflection would be a good first step
+class EntityManager {
 
     private val maxEntities = 1_000
 
