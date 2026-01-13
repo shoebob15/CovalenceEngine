@@ -6,11 +6,9 @@ import ecs.World
 import event.Input
 
 class PlayerControlSystem : System {
-    private val playerSpeed = 2f
+    private val playerSpeed = 0.4f
 
     override fun update(world: World, deltaTime: Float) {
-        println("fps: ${1000f / deltaTime}")
-
         world.entityManager.iterateEntities { entity ->
             // TODO: from an api standpoint, this is unacceptable. related to todo in EntityManager
             // TODO: more meta, but create a better way to manage TODOs (trello, fizzy, etc.)
@@ -18,20 +16,20 @@ class PlayerControlSystem : System {
                 val transform =
                     world.entityManager.getComponent<TransformComponent>(entity) ?: error("player has no transform")
 
-                if (Input.isKeyPressed(87)) { // W
-                    transform.position.y += playerSpeed * deltaTime
+                // this code is absolute garbage
+                val halfScreen = 400f
+                val limit = transform.scale.y * 2f
+
+                if (Input.isKeyPressed(87)) { // w
+                    if (transform.position.y + limit < halfScreen) {
+                        transform.position.y += playerSpeed * deltaTime
+                    }
                 }
 
-                if (Input.isKeyPressed(83)) { // S
-                    transform.position.y -= playerSpeed * deltaTime
-                }
-
-                if (Input.isKeyPressed(65)) { // A
-                    transform.position.x -= playerSpeed * deltaTime
-                }
-
-                if (Input.isKeyPressed(68)) { // D
-                    transform.position.x += playerSpeed * deltaTime
+                if (Input.isKeyPressed(83)) { // s
+                    if (transform.position.y - limit > -halfScreen) {
+                        transform.position.y -= playerSpeed * deltaTime
+                    }
                 }
             }
         }

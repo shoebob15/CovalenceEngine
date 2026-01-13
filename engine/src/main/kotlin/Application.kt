@@ -77,7 +77,6 @@ class Application(
             graphicsBackend.endFrame()
             profiler.endScope()
 
-            lastFrameTime = System.nanoTime()
             limitFrameRate(frameStart)
             profiler.endScope()
         }
@@ -106,7 +105,6 @@ class Application(
     private fun limitFrameRate(frameStart: Long) {
         val frameTime = System.nanoTime() - frameStart
         val remaining = targetFrameTime - frameTime
-        logger.debug("frame time $frameTime, sleeping for $remaining")
 
         if (remaining > 0) {
             Thread.sleep(
